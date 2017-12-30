@@ -313,5 +313,51 @@ namespace Akka.Streams.Contrib.Tests
             source.SendComplete();
             sink.ExpectComplete();
         }
+        
+        [Fact]
+        public void RetryConcat_tolerate_killswitch_terminations_after_start()
+        {
+            var t = this.SourceProbe<int>()
+                .ViaMaterialized(KillSwitches.Single<int>(), Keep.Both)
+                .Select(i => Tuple.Create(i, i * i))
+                .Via(Retry.Concat(100, RetryFlow<int>(), x =>
+                {
+                    if (x % 4 == 0) return new[] {Tuple.Create(x / 2, x / 4)};
+                    var sqrt = (int) Math.Sqrt(x);
+                    return new[] {Tuple.Create(sqrt, x)};
+                }))
+                .ToMaterialized(this.SinkProbe<Tuple<Result<int>, int>>(), Keep.Both)
+                .Run(Sys.Materializer());
+
+            var source = t.Item1.Item1;
+            var killswitch = t.Item1.Item2;
+            var sink = t.Item2;
+
+            sink.Request(99);
+            source.SendNext(1);
+            sink.ExpectNext().Item1.Value.Should().Be(2);
+            source.SendNext(2);
+            sink.ExpectNext().Item1.Value.Should().Be(2);
+            killswitch.Abort(FailedElement.Exception);
+            sink.ExpectError().Should().Be(FailedElement.Exception);
+        }
+        
+        [Fact]
+        public void RetryConcat_tolerate_killswitch_terminations_on_start()
+        {
+            var t = this.SourceProbe<int>()
+                .ViaMaterialized(KillSwitches.Single<int>(), Keep.Right)
+                .Select(i => Tuple.Create(i, i))
+                .Via(Retry.Concat(100, RetryFlow<int>(), x => new[] {Tuple.Create(x, x + 1)}))
+                .ToMaterialized(this.SinkProbe<Tuple<Result<int>, int>>(), Keep.Both)
+                .Run(Sys.Materializer());
+
+            var killSwitch = t.Item1;
+            var sink = t.Item2;
+
+            sink.Request(99);
+            killSwitch.Abort(FailedElement.Exception);
+            sink.ExpectError().Should().Be(FailedElement.Exception);
+        }
     }
 }

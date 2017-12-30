@@ -123,7 +123,7 @@ namespace Akka.Streams.Contrib.Tests
             source.SendNext(2);
             sink.ExpectNext().Item1.Value.Should().Be(2);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace Akka.Streams.Contrib.Tests
 
             sink.Request(99);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace Akka.Streams.Contrib.Tests
 
             killSwitch.Abort(FailedElement.Exception);
             sink.Request(1);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
 
         [Fact]
@@ -183,7 +183,7 @@ namespace Akka.Streams.Contrib.Tests
 
             sink.Request(99);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
 
         [Fact]
@@ -202,7 +202,7 @@ namespace Akka.Streams.Contrib.Tests
 
             sink.Request(99);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -221,7 +221,7 @@ namespace Akka.Streams.Contrib.Tests
 
             killSwitch.Abort(FailedElement.Exception);
             sink.Request(1);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -336,7 +336,7 @@ namespace Akka.Streams.Contrib.Tests
             source.SendNext(2);
             sink.ExpectNext().Item1.Value.Should().Be(2);
             killswitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -354,7 +354,7 @@ namespace Akka.Streams.Contrib.Tests
 
             sink.Request(99);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -372,7 +372,7 @@ namespace Akka.Streams.Contrib.Tests
 
             killSwitch.Abort(FailedElement.Exception);
             sink.Request(1);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -401,7 +401,7 @@ namespace Akka.Streams.Contrib.Tests
             source.SendNext(2);
             sink.ExpectNext().Item1.Value.Should().Be(2);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -419,7 +419,7 @@ namespace Akka.Streams.Contrib.Tests
 
             sink.Request(99);
             killSwitch.Abort(FailedElement.Exception);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
         
         [Fact]
@@ -439,7 +439,7 @@ namespace Akka.Streams.Contrib.Tests
 
             killSwitch.Abort(FailedElement.Exception);
             sink.Request(1);
-            sink.ExpectError().Should().Be(FailedElement.Exception);
+            sink.ExpectError().InnerException.Should().Be(FailedElement.Exception);
         }
     }
 }
